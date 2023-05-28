@@ -5,8 +5,8 @@
 .COMPANYNAME
 .COPYRIGHT Chad Armitage
 .TAGS Create Windows Server USB Bootable ISO Image
-.LICENSEURI https://github.com/Legitage/Public/blob/main/LICENSE
-.PROJECTURI https://github.com/Legitage/Public
+.LICENSEURI https://github.com/Legitage/Public/blob/main/New-WinServerUsbInstall/LICENSE
+.PROJECTURI https://github.com/Legitage/Public/tree/main/New-WinServerUsbInstall
 .RELEASENOTES
     Change history located in README.md
 #>
