@@ -5,7 +5,7 @@
 .COMPANYNAME
 .COPYRIGHT Chad Armitage
 .TAGS Create Windows Server USB Bootable ISO Image
-.LICENSEURI https://github.com/Legitage/Public/blob/main/New-WinServerUsbInstall/LICENSE
+.LICENSEURI https://github.com/Legitage/Public/blob/main/LICENSE
 .PROJECTURI https://github.com/Legitage/Public/tree/main/New-WinServerUsbInstall
 .RELEASENOTES
     Change history located in README.md
@@ -26,7 +26,7 @@
     Option to specify UEFI GPT or legacy BIOS MBR (GPT is the default)
 
     .NOTES
-    Script must run from an elevated command prompt
+    Script must run as an Administrator
 #>
 
 [CmdletBinding()]
@@ -41,13 +41,8 @@ param (
 )
 
 #Requires -Version 5.1
+#Requires -RunAsAdministrator
 $ErrorActionPreference = "Stop"
-
-# Check for elevated PowerShell Window
-if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
-    Write-Host "`nScript must be run from an elevated command prompt.`n" -BackgroundColor Black -ForegroundColor Red
-    exit 1
-}
 
 Function Copy-FolderItem {
     <#
