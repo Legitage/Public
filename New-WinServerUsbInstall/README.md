@@ -50,8 +50,8 @@ Copyright: Chad Armitage
 ## License
 
 MIT License  
-LICENSE.txt file for details
+[LICENSE](https://github.com/Legitage/Public/blob/main/LICENSE) file for details
 
 ## Acknowledgments
 
-Thank you to Thomas Maurer for the idea: [Create an USB Drive for Windows Server 2022 Installation](https://www.thomasmaurer.ch/2021/11/create-an-usb-drive-for-windows-server-2022-installation/)
+Thanks to Thomas Maurer for the idea: [Create an USB Drive for Windows Server 2022 Installation](https://www.thomasmaurer.ch/2021/11/create-an-usb-drive-for-windows-server-2022-installation/)

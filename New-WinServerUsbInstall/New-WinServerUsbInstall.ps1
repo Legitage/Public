@@ -20,10 +20,13 @@
     and creates a UEFI or BIOS bootable USB drive
     
     .PARAMETER WindowsServerISO
-    Path to the Windows Server 2022 ISO. Example: "C:\Temp\WindowsServer2022.iso"
+    Path to the Windows Server 2022 ISO. Example: 
 
     .PARAMETER BootType
     Option to specify UEFI GPT or legacy BIOS MBR (GPT is the default)
+
+    .EXAMPLE
+    "C:\Temp\WindowsServer2022.iso"
 
     .NOTES
     Script must run as an Administrator

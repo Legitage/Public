@@ -1,15 +1,58 @@
+<#PSScriptInfo
+.VERSION 1.0.0
+.GUID 34b944a9-31ba-4120-8da1-ed848d95fc56
+.AUTHOR Chad Armitage
+.COMPANYNAME N/A
+.COPYRIGHT Chad Armitage
+.TAGS markdown html
+.LICENSEURI https://github.com/Legitage/Public/blob/main/LICENSE
+.PROJECTURI https://github.com/Legitage/Public/tree/main
+.RELEASENOTES 
+#>
+
 <#
     .SYNOPSIS
-    Converts README.md to README.html
+    Converts a Markdown file to a single HTML
+
+	.DESCRIPTION
+	Takes a Markdown file input, converts the content to an html file, and applies a Cascading Style Sheet to make it more readable
+
+	.PARAMETER FilePath
+	Option to specify the markdown file path and skip the Windows dialog box
+
+	.NOTES
+	CSS stylesheets ref: https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css
 #>
 
 #Requires -Version 7.0
 
-# Take input .md file 
+[CmdletBinding()]
+param (
+	[parameter(Position = 0, Mandatory = $false, ValueFromPipeline = $false, HelpMessage = "Enter the full path to the markdown file")]
+	[System.IO.FileInfo]$FilePath
+)
 
-$convertedMarkdown = ConvertFrom-Markdown -Path ".\README.md"
-[string[]]$convertedMarkdownHtml = $convertedMarkdown.html
+function Open-MdFileDialog {
+	<#
+    .SYNOPSIS
+    Prompts user to select a file (invokes Windows Dialog box)
 
+    .NOTES
+    Reference: https://devblogs.microsoft.com/scripting/hey-scripting-guy-can-i-open-a-file-dialog-box-with-windows-powershell/
+    #>
+
+	[System.IO.FileInfo]$defaultFolderPath = $PSScriptRoot
+	Add-Type -AssemblyName System.Windows.Forms
+	$openFileDialog = New-Object System.Windows.Forms.OpenFileDialog
+	$openFileDialog.Title = "Select a Markdown File"
+	$openFileDialog.InitialDirectory = $defaultFolderPath
+	$openFileDialog.Filter = "MD Files (*.md)|*.md|All Files (*.*)|*.*"
+	$openFileDialog.ShowDialog() | Out-Null
+
+	return $openFileDialog.Filename
+}
+
+# Inline CSS formatting
 $htmlCSS = @"
 <style>
 /*---------------------------------------------------------------------------------------------
@@ -283,6 +326,13 @@ pre {
 </style>
 "@
 
+if (-not $FilePath) {
+	[System.IO.FileInfo]$FilePath = Open-MdFileDialog
+}
+
+$convertedMarkdown = ConvertFrom-Markdown -Path $FilePath
+[string[]]$convertedMarkdownHtml = $convertedMarkdown.html
+
 $htmlFileFormat = @"
 <!DOCTYPE html>
 <html>
@@ -293,4 +343,6 @@ $convertedMarkdownHtml
 </html>
 "@
 
-$htmlFileFormat | Out-File -Encoding utf8 ".\README.html"
+$folderPath = $File.DirectoryName
+$fileName = $File.BaseName
+Out-File -InputObject $htmlFileFormat -FilePath "$folderPath\$($fileName).html" -Encoding utf8 -Width 400 -Force

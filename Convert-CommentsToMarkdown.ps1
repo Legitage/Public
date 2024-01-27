@@ -2,11 +2,11 @@
 .VERSION 1.0.0
 .GUID 5037983c-2a0f-4485-afff-d3b55945820d
 .AUTHOR Chad Armitage
-.COMPANYNAME
+.COMPANYNAME N/A
 .COPYRIGHT Chad Armitage
 .TAGS markdown numbered comments
 .LICENSEURI https://github.com/Legitage/Public/blob/main/LICENSE
-.PROJECTURI https://github.com/Legitage/Public/tree/main/New-WinServerUsbInstall
+.PROJECTURI https://github.com/Legitage/Public/tree/main
 .RELEASENOTES 
 #>
 
@@ -15,14 +15,14 @@
     Parses script file for numbered comments and outputs a markdown numbered list file
 
     .DESCRIPTION
-    Comments in the specified script file are parsed and those containing a version build style number are ordered 
-    and converted into a numbered markdown list that is written to a .md file in the same directory
+    Comments in the specified script file are parsed and those containing a version build style number are ordered and converted 
+    into a numbered markdown list that is copied to the clipboard or optionally written to a .md file in the same directory
 
-    .PARAMETER SampleParam
-    Name of parameter and an explanation of its purpose
+    .PARAMETER FilePath
+    Option to specify the powershell script file path and skip the Windows dialog box
 
     .EXAMPLE
-    .\New-ScriptComments.ps1 "C:\Repo\Engineering\MyCoolScript.ps1"
+    .\Convert-CommentsToMarkdown.ps1 "C:\MyRepo\MyCoolScript.ps1"
 
     .NOTES
     Comments need to start with 1.0.0, 1.1.0, 2.0.0, etc... and not contain gaps in the numbering sequence
@@ -31,15 +31,38 @@
 
 [CmdletBinding()]
 param (
-    [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $false, HelpMessage = "Enter the full path to the script file")]
-    [System.IO.FileInfo]$File
+    [parameter(Position = 0, Mandatory = $false, ValueFromPipeline = $false, HelpMessage = "Enter the full path to the script file")]
+    [System.IO.FileInfo]$FilePath,
+
+    [parameter(Position = 0, Mandatory = $false, ValueFromPipeline = $false)]
+    [switch]$OutputToFile
 )
 
 #Requires -Version 5.1
 
-$folderPath = $File.DirectoryName
-$fileName = $File.BaseName
-$scriptComments = Get-Content $File | Where-Object { ($_ -like "*# *") -and ($_ -notlike "*<#*") }
+function Open-PsFileDialog {
+    <#
+    .SYNOPSIS
+    Prompts user to select a file (invokes Windows Dialog box)
+
+    .NOTES
+    Reference: https://devblogs.microsoft.com/scripting/hey-scripting-guy-can-i-open-a-file-dialog-box-with-windows-powershell/
+    #>
+
+    [System.IO.FileInfo]$defaultFolderPath = $PSScriptRoot
+    Add-Type -AssemblyName System.Windows.Forms
+    $openFileDialog = New-Object System.Windows.Forms.OpenFileDialog
+    $openFileDialog.Title = "Select a Markdown File"
+    $openFileDialog.InitialDirectory = $defaultFolderPath
+    $openFileDialog.Filter = "MD Files (*.ps1;*.psm1)|*.ps1;*.psm1|All Files (*.*)|*.*"
+    $openFileDialog.ShowDialog() | Out-Null
+
+    return $openFileDialog.Filename
+}
+
+$folderPath = $FilePath.DirectoryName
+$fileName = $FilePath.BaseName
+$scriptComments = Get-Content $FilePath | Where-Object { ($_ -like "*# *") -and ($_ -notlike "*<#*") }
 [string[]]$numberedComments = $scriptComments | Select-String -Pattern '\d+\.\d+\.\d+'
 $numberedComments = $numberedComments.TrimStart()
 $numberedComments = $numberedComments -replace '# '
@@ -68,4 +91,10 @@ foreach ($numberedComment in $numberedComments) {
 $versionedComments.Sort( { $args[0].Number.compareto($args[1].Number) } )
 [string[]]$markdownComments = $versionedComments.Comment
 
-Out-File -InputObject $markdownComments -FilePath "$folderPath\$($fileName)_tmp.md" -Encoding ascii -Width 400 -Force
+$markdownComments | Set-Clipboard
+Write-Host "Markdown formatted comments copied to clipboard."
+
+if ($OutputToFile) {
+    Out-File -InputObject $markdownComments -FilePath "$folderPath\$($fileName)_comments.md" -Encoding ascii -Width 400 -Force
+    Write-Host "Markdown formatted comments written to $folderPath\$($fileName)_comments.md"
+}
