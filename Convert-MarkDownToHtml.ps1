@@ -6,7 +6,7 @@
 .COPYRIGHT Chad Armitage
 .TAGS markdown html
 .LICENSEURI https://github.com/Legitage/Public/blob/main/LICENSE
-.PROJECTURI https://github.com/Legitage/Public/tree/main
+.PROJECTURI https://github.com/Legitage/Public
 .RELEASENOTES 
 #>
 
@@ -21,7 +21,7 @@
 	Option to specify the markdown file path and skip the Windows dialog box
 
 	.NOTES
-	CSS stylesheets ref: https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css
+	CSS ref: https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css
 #>
 
 #Requires -Version 7.0

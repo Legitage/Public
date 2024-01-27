@@ -6,7 +6,7 @@
 .COPYRIGHT Chad Armitage
 .TAGS markdown numbered comments
 .LICENSEURI https://github.com/Legitage/Public/blob/main/LICENSE
-.PROJECTURI https://github.com/Legitage/Public/tree/main
+.PROJECTURI https://github.com/Legitage/Public
 .RELEASENOTES 
 #>
 
@@ -54,7 +54,7 @@ function Open-PsFileDialog {
     $openFileDialog = New-Object System.Windows.Forms.OpenFileDialog
     $openFileDialog.Title = "Select a Markdown File"
     $openFileDialog.InitialDirectory = $defaultFolderPath
-    $openFileDialog.Filter = "MD Files (*.ps1;*.psm1)|*.ps1;*.psm1|All Files (*.*)|*.*"
+    $openFileDialog.Filter = "PS Files (*.ps1;*.psm1)|*.ps1;*.psm1|All Files (*.*)|*.*"
     $openFileDialog.ShowDialog() | Out-Null
 
     return $openFileDialog.Filename
