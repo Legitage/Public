@@ -1,46 +1,99 @@
-<h1 id="new-winserverusbinstall">New-WinServerUsbInstall</h1>
-<h2 id="description">Description</h2>
-<p>Copies install files from ISO Windows Server 2016, 2019, or 2022 server image and creates a UEFI or BIOS bootable USB drive</p>
-<h2 id="getting-started">Getting Started</h2>
-<h3 id="dependencies">Dependencies</h3>
-<ul>
-<li>PowerShell 5.1 is required. This is installed by default on all versions of Windows 10 and Windows 11.</li>
-<li>A Windows Server 2016, 2019, or 2022 ISO image</li>
-</ul>
-<h3 id="installing">Installing</h3>
-<ul>
-<li>Download script files to the local hard drive</li>
-</ul>
-<h3 id="executing-program">Executing program</h3>
-<ul>
-<li>Run the script from an elevated PowerShell prompt</li>
-<li>Examples:</li>
-</ul>
-<pre><code class="language-PowerShell"># Create UEFI compatible flash drive using the specified Windows Server ISO
-.\New-WinServerUsbInstall.ps1 &quot;C:\Temp\WindowsServer2022.iso&quot;
+<!DOCTYPE html>
+<html>
 
-# Create a legacy BIOS compatible flash drive using the specified Windows Server ISO
-.\New-WinServerUsbInstall.ps1 -WindowsServerISO &quot;C:\Temp\WindowsServer2022.iso&quot; -BootType MBR
-</code></pre>
-<h2 id="help">Help</h2>
-<p>Built-in parameter help is available using Get-Help</p>
-<pre><code class="language-PowerShell">Get-Help New-WinServerUsbInstall.ps1 -Detailed
-</code></pre>
-<h2 id="authors">Authors</h2>
-<p>Author: Chad Armitage<br />
-Contact: <a href="mailto:legitage@hotmail.com">legitage@hotmail.com</a><br />
-Copyright: Chad Armitage</p>
-<h2 id="version-history">Version History</h2>
-<ul>
-<li>1.0.0
-<ul>
-<li>Initial Release</li>
-</ul>
-</li>
-</ul>
-<h2 id="license">License</h2>
-<p>MIT License<br />
-LICENSE.txt file for details</p>
-<h2 id="acknowledgments">Acknowledgments</h2>
-<p>Thank you to Thomas Maurer for the idea: <a href="https://www.thomasmaurer.ch/2021/11/create-an-usb-drive-for-windows-server-2022-installation/">Create an USB Drive for Windows Server 2022 Installation</a></p>
+<head>
+    <meta charset="UTF-8">
+    <title>New-WinServerUsbInstall</title>
+    <style>
+        /* From extension vscode.github */
+        /*---------------------------------------------------------------------------------------------
+         *  Copyright (c) Microsoft Corporation. All rights reserved.
+         *  Licensed under the MIT License. See License.txt in the project root for license information.
+         *--------------------------------------------------------------------------------------------*/
 
+        .vscode-dark img[src$=\#gh-light-mode-only],
+        .vscode-light img[src$=\#gh-dark-mode-only] {
+            display: none;
+        }
+    </style>
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+    <style>
+        .task-list-item {
+            list-style-type: none;
+        }
+
+        .task-list-item-checkbox {
+            margin-left: -20px;
+            vertical-align: middle;
+            pointer-events: none;
+        }
+    </style>
+
+</head>
+
+<body class="vscode-body vscode-light">
+    <h1 id="new-winserverusbinstall">New-WinServerUsbInstall</h1>
+    <h2 id="description">Description</h2>
+    <p>Copies install files from ISO Windows Server 2016, 2019, or 2022 server image and creates a UEFI or BIOS bootable
+        USB drive</p>
+    <h2 id="getting-started">Getting Started</h2>
+    <h3 id="dependencies">Dependencies</h3>
+    <ul>
+        <li>PowerShell 5.1 is required. This is installed by default on all versions of Windows 10 and Windows 11.</li>
+        <li>A Windows Server 2016, 2019, or 2022 ISO image</li>
+    </ul>
+    <h3 id="installing">Installing</h3>
+    <ul>
+        <li>Download script files to the local hard drive</li>
+    </ul>
+    <h3 id="executing-program">Executing program</h3>
+    <ul>
+        <li>Run the script from an elevated PowerShell prompt</li>
+        <li>Examples:</li>
+    </ul>
+    <pre><code class="language-PowerShell"><span class="hljs-comment"># Create UEFI compatible flash drive using the specified Windows Server ISO</span>
+.\<span class="hljs-built_in">New-WinServerUsbInstall</span>.ps1 <span class="hljs-string">&quot;C:\Temp\WindowsServer2022.iso&quot;</span>
+
+<span class="hljs-comment"># Create a legacy BIOS compatible flash drive using the specified Windows Server ISO</span>
+.\<span class="hljs-built_in">New-WinServerUsbInstall</span>.ps1 <span class="hljs-literal">-WindowsServerISO</span> <span class="hljs-string">&quot;C:\Temp\WindowsServer2022.iso&quot;</span> <span class="hljs-literal">-BootType</span> MBR
+</code></pre>
+    <h2 id="help">Help</h2>
+    <p>Built-in parameter help is available using Get-Help</p>
+    <pre><code class="language-PowerShell"><span class="hljs-built_in">Get-Help</span> <span class="hljs-built_in">New-WinServerUsbInstall</span>.ps1 <span class="hljs-literal">-Detailed</span>
+</code></pre>
+    <h2 id="authors">Authors</h2>
+    <p>Author: Chad Armitage<br>
+        Contact: <a href="mailto:legitage@hotmail.com">legitage@hotmail.com</a><br>
+        Copyright: Chad Armitage</p>
+    <h2 id="version-history">Version History</h2>
+    <ul>
+        <li>1.0.0
+            <ul>
+                <li>Initial Release</li>
+            </ul>
+        </li>
+    </ul>
+    <h2 id="license">License</h2>
+    <p>MIT License<br>
+        LICENSE.txt file for details</p>
+    <h2 id="acknowledgments">Acknowledgments</h2>
+    <p>Thank you to Thomas Maurer for the idea: <a
+            href="https://www.thomasmaurer.ch/2021/11/create-an-usb-drive-for-windows-server-2022-installation/">Create
+            an USB Drive for Windows Server 2022 Installation</a></p>
+
+
+
+</body>
+
+</html>
