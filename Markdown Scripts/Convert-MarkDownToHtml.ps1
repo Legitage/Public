@@ -6,8 +6,9 @@
 .COPYRIGHT Chad Armitage
 .TAGS markdown html
 .LICENSEURI https://github.com/Legitage/Public/blob/main/LICENSE
-.PROJECTURI https://github.com/Legitage/Public/tree/main
+.PROJECTURI https://github.com/Legitage/Public
 .RELEASENOTES 
+    1.0.0  Initial release
 #>
 
 <#
@@ -21,7 +22,7 @@
 	Option to specify the markdown file path and skip the Windows dialog box
 
 	.NOTES
-	CSS stylesheets ref: https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css
+	CSS ref: https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css
 #>
 
 #Requires -Version 7.0
@@ -343,6 +344,6 @@ $convertedMarkdownHtml
 </html>
 "@
 
-$folderPath = $File.DirectoryName
-$fileName = $File.BaseName
+$folderPath = $FilePath.DirectoryName
+$fileName = $FilePath.BaseName
 Out-File -InputObject $htmlFileFormat -FilePath "$folderPath\$($fileName).html" -Encoding utf8 -Width 400 -Force

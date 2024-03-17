@@ -6,8 +6,9 @@
 .COPYRIGHT Chad Armitage
 .TAGS markdown numbered comments
 .LICENSEURI https://github.com/Legitage/Public/blob/main/LICENSE
-.PROJECTURI https://github.com/Legitage/Public/tree/main
+.PROJECTURI https://github.com/Legitage/Public
 .RELEASENOTES 
+    1.0.0  Initial release
 #>
 
 <#
@@ -34,7 +35,7 @@ param (
     [parameter(Position = 0, Mandatory = $false, ValueFromPipeline = $false, HelpMessage = "Enter the full path to the script file")]
     [System.IO.FileInfo]$FilePath,
 
-    [parameter(Position = 0, Mandatory = $false, ValueFromPipeline = $false)]
+    [parameter(Position = 1, Mandatory = $false, ValueFromPipeline = $false)]
     [switch]$OutputToFile
 )
 
@@ -82,8 +83,8 @@ foreach ($numberedComment in $numberedComments) {
 
     $modifiedComment = $numberedComment -replace $numbered, $mdNumber
     $versionedComment = [PSCustomObject]@{
-        "Number"  = $numberedVersion
-        "Comment" = $modifiedComment
+        Number  = $numberedVersion
+        Comment = $modifiedComment
     }
     $versionedComments.Add($versionedComment)
 }
