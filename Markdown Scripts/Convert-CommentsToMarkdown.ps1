@@ -8,6 +8,7 @@
 .LICENSEURI https://github.com/Legitage/Public/blob/main/LICENSE
 .PROJECTURI https://github.com/Legitage/Public
 .RELEASENOTES 
+    1.0.0  Initial release
 #>
 
 <#
@@ -34,7 +35,7 @@ param (
     [parameter(Position = 0, Mandatory = $false, ValueFromPipeline = $false, HelpMessage = "Enter the full path to the script file")]
     [System.IO.FileInfo]$FilePath,
 
-    [parameter(Position = 0, Mandatory = $false, ValueFromPipeline = $false)]
+    [parameter(Position = 1, Mandatory = $false, ValueFromPipeline = $false)]
     [switch]$OutputToFile
 )
 
@@ -54,7 +55,7 @@ function Open-PsFileDialog {
     $openFileDialog = New-Object System.Windows.Forms.OpenFileDialog
     $openFileDialog.Title = "Select a Markdown File"
     $openFileDialog.InitialDirectory = $defaultFolderPath
-    $openFileDialog.Filter = "PS Files (*.ps1;*.psm1)|*.ps1;*.psm1|All Files (*.*)|*.*"
+    $openFileDialog.Filter = "MD Files (*.ps1;*.psm1)|*.ps1;*.psm1|All Files (*.*)|*.*"
     $openFileDialog.ShowDialog() | Out-Null
 
     return $openFileDialog.Filename
@@ -82,8 +83,8 @@ foreach ($numberedComment in $numberedComments) {
 
     $modifiedComment = $numberedComment -replace $numbered, $mdNumber
     $versionedComment = [PSCustomObject]@{
-        "Number"  = $numberedVersion
-        "Comment" = $modifiedComment
+        Number  = $numberedVersion
+        Comment = $modifiedComment
     }
     $versionedComments.Add($versionedComment)
 }

@@ -8,6 +8,7 @@
 .LICENSEURI https://github.com/Legitage/Public/blob/main/LICENSE
 .PROJECTURI https://github.com/Legitage/Public
 .RELEASENOTES 
+    1.0.0  Initial release
 #>
 
 <#
@@ -343,6 +344,6 @@ $convertedMarkdownHtml
 </html>
 "@
 
-$folderPath = $File.DirectoryName
-$fileName = $File.BaseName
+$folderPath = $FilePath.DirectoryName
+$fileName = $FilePath.BaseName
 Out-File -InputObject $htmlFileFormat -FilePath "$folderPath\$($fileName).html" -Encoding utf8 -Width 400 -Force
