@@ -1,26 +1,23 @@
 <#PSScriptInfo
 .VERSION 1.0.0
-.GUID 
-.AUTHOR 
-.COMPANYNAME 
-.COPYRIGHT 
-.TAGS O365 M365 Azure Pester Module
-.LICENSEURI https://example.com/
-.PROJECTURI https://example.com/
+.GUID 893e2a7c-58b7-48c6-a287-8d86896a4c5a
+.AUTHOR Chad Armitage
+.COMPANYNAME N/A
+.COPYRIGHT Chad Armitage
+.TAGS O365 Azure Pester Module
+.LICENSEURI https://github.com/Legitage/Public/blob/main/LICENSE
+.PROJECTURI https://github.com/Legitage/Public
 .RELEASENOTES
     1.0.0  Initial release
 #>
 
 <#
     .SYNOPSIS
-    Automates the installation of Microsoft M365 PowerShell module(s)
+    Automates installation of PowerShell modules specified in JSON file
 
     .DESCRIPTION
-    Automatically elevates the PowerShell script and installs specified Microsoft M365 and Azure PowerShell modules with the latest version.
+    Automatically elevates the PowerShell script and installs JSON specified PowerShell modules with the latest version.
     Also includes option to install Pester v5.
-
-    .PARAMETER Options
-    Allows for the selection of specific groups of modules. If no value is entered script defaults to 'All'
 
     .NOTES
     Script must run from an elevated command prompt (user should be prompted)
@@ -29,24 +26,14 @@
     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
 #>
 
-[CmdletBinding()]
-param(
-    [parameter(Mandatory = $false, ValueFromPipeline = $false)]
-    [ValidateSet("All", "Pester", "O365", "Azure", "Graph")]
-    [string[]]$Options = "All"
-)
-
-# PowerShell 5.x required. The version of PowerShell included with Windows 10
-#Requires -Version 5.0
+#Requires -Version 5.2
+$ErrorActionPreference = "SilentlyContinue"
 
 if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
-    $cmdOptions = $Options -join ','
-    $commandLine = '-Command ' + '"& {'  + "$PSScriptRoot\Install-M365Module.ps1" + " -Options $cmdOptions" + '}"'
+    $commandLine = '-Command ' + '"& {'  + "$PSScriptRoot\Install-PowerShellModules.ps1" + '}"'
     Start-Process PowerShell.exe -Verb Runas -ArgumentList $commandLine
     exit 0
 }
-
-$ErrorActionPreference = "SilentlyContinue"
 
 Function Install-PowerShellModule {
     <#
@@ -73,22 +60,23 @@ Function Install-PowerShellModule {
         $moduleVersion = (Find-Module -Name $module).Version
         $moduleInstalled = Get-InstalledModule -Name $module -MinimumVersion $moduleVersion -ErrorAction SilentlyContinue
         if ($moduleInstalled) {
-            Write-Log "`nThe $module module is already installed with version $moduleVersion." Green
+            Write-Log "The $module module is already installed with version $moduleVersion." Green
             $moduleInstallStatus = "Current"
 
         }
         else {
+            # Pester is a special case and requires different handling
             if ($module -eq "Pester") {
                 Remove-Pester3
             }
-            Write-Log "`nThe $module module is either not installed or is an outdated version.`nInstalling current version."
+            Write-Log "The $module module is either not installed or is an outdated version. Installing current version."
             try {
                 Install-Module -Name $module -MinimumVersion $moduleVersion -Force -AllowClobber -Confirm:$false
                 $moduleInstallStatus = "Installed"
             }
             catch {
                 $basicError = $Error[0]
-                Write-Log "Module install failed.`n Error: $basicError" Red
+                Write-Log "Module install failed. Error: $basicError" Red
                 $moduleInstallStatus = "Failed"
             }
         }
@@ -173,61 +161,41 @@ Function Write-Log {
 
     # Log line output to a file
     Out-File -InputObject $LogLine -FilePath $logFilePath -Encoding ascii -Width 400 -Append
-
-    if (-not $logFileOnly) {
-        # Log line output to the console
-        $host.ui.RawUI.ForegroundColor = $Color
-        Out-Host -InputObject $LogLine 
-    }
+    
+    # Log line output to the console
+    $host.ui.RawUI.ForegroundColor = $Color
+    Out-Host -InputObject $LogLine 
+    
 }
 
-# List of Modules to be installed or updated to the latest version
-$allModules = @{
-    "O365"   = @(
-        "ExchangeOnlineManagement",
-        "AzureAD",
-        "MicrosoftTeams",
-        "Microsoft.Online.SharePoint.PowerShell",
-        "AIPService",
-        "PnP.PowerShell"
-    )
-    "Azure"  = @(
-        "Az"
-    )
-    "Pester" = @(
-        "Pester"
-    )
-    "Graph" = @(
-        "Microsoft.Graph"
-    )
-}
+# Get Modules to be installed or updated to the latest version
+[string[]]$moduleList = (Get-Content "$PSScriptRoot\PowerShellModulesList.json" | ConvertFrom-Json).modules
 
-$global:logFilePath = "$env:TEMP\InstallM365Module" + "_(" + $env:COMPUTERNAME + ").txt"
+
+$global:logFilePath = "$env:TEMP\InstallPowerShellModules" + "_(" + $env:COMPUTERNAME + ").txt"
 $startTime = (Get-Date).ToUniversalTime()
 $separator = "========================================================================"
 $moduleInstallResults = [System.Collections.ArrayList]::new()
 $moduleInstallResults = @()
 
-# Log start of Install-M365Module
-Write-Log "`n$separator`nInstall-M365Module started at $startTime UTC with the following option: $Options"
-
-if ($Options -contains "All") {
-    $Options = @("O365", "Azure", "Pester", "Graph")
-}
+# Log start of Install-PowerShellModules
+Write-Log $separator
+Write-Log "Install-PowerShellModules started at $startTime UTC"
 
 # Always make sure that PowerShell Get is installed and trusted or all other module install operations will be problematic
 Install-PowerShellGet
 
 # Install the latest version of specified modules if missing or outdated
-foreach ($option in $Options) {
-    $result = Install-PowerShellModule -ModuleList $($allModules.$option)
-    $moduleInstallResults += $result
-}
+$result = Install-PowerShellModule -ModuleList $moduleList
+$moduleInstallResults += $result
 
-Write-Log "`nModules install results:"
+
+Write-Log "Modules install results:"
 Write-Log $moduleInstallResults
 
-# Log end of Install-M365Module
+# Log end of Install-PowerShellModules
 $scriptExecutionTime = ((Get-Date).ToUniversalTime()) - $startTime
-Write-Log "Install-M365Module took $($scriptExecutionTime.ToString("hh\:mm\:ss")) to complete.`n$separator"
-Start-Sleep 5
+Write-Log "Install-PowerShellModules took $($scriptExecutionTime.ToString("hh\:mm\:ss")) to complete."
+Write-Log $separator
+# Leave output on screen for 10 seconds before closing the window
+Start-Sleep 10

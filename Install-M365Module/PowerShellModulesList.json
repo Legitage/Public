@@ -1,0 +1,12 @@
+{
+  "modules": [
+    "ExchangeOnlineManagement",
+    "MicrosoftTeams",
+    "Microsoft.Online.SharePoint.PowerShell",
+    "Microsoft.PowerApps.Administration.PowerShell",
+    "Microsoft.Graph",
+    "Az",
+    "PnP.PowerShell",
+    "Pester"
+  ]
+}
