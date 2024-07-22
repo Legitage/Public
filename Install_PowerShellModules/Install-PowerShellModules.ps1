@@ -67,7 +67,7 @@ Install-PowerShellGet
 
 # x.x.0 Install the latest version of specified modules if missing or outdated
 $results = Install-PowerShellModule -ModuleList $modules
-$moduleInstallResults.Add($results)
+$moduleInstallResults.AddRange($results)
 
 # x.x.0 Pester is a special case and requires different handling
 if ($powerShellModulesList.pesterUpgrade -eq $true) {

@@ -156,14 +156,36 @@ function Install-PowerShell7 {
         [version]$release = $metadata.ReleaseTag -replace '^v'
         if ($ps7Version -lt $release) {
             Write-Log "Updating PowerShell 7 from $ps7Version to version $release"
-            Invoke-Expression "& { $(Invoke-RestMethod -Uri "https://aka.ms/install-powershell.ps1") } -UseMSI"
+            $installPS7 = $true
         }
-        else{
+        else {
             Write-Log "PowerShell 7 is up-to-date" Green
+            $moduleInstallStatus = "Current"
+            $installPS7 = $false
         }
     }
     else {
         Write-Log "PowerShell 7 not installed. Installing version $release"
-        Invoke-Expression "& { $(Invoke-RestMethod -Uri "https://aka.ms/install-powershell.ps1") } -UseMSI"
+        $installPS7 = $true
     }
+
+    if ($installPS7 -eq $true) {
+        try {
+            Invoke-Expression "& { $(Invoke-RestMethod -Uri "https://aka.ms/install-powershell.ps1") } -UseMSI"
+            $moduleInstallStatus = "Installed"
+        }
+        catch {
+            $basicError = $Error[0]
+            Write-Log "Module install failed. Error: $basicError" Red
+            $moduleInstallStatus = "Failed"
+        }
+    }
+
+    $installResult = [PSCustomObject]@{
+        "Module Name"    = "PowerShell 7"
+        "Module Version" = $release.ToString()
+        "Result"         = $moduleInstallStatus
+    }
+
+    return $installResult
 }
