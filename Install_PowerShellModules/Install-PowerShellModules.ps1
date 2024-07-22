@@ -60,26 +60,26 @@ $moduleInstallResults = [System.Collections.ArrayList]::new()
 
 # 1.x.0 Begin update log
 Write-Log $separator
-Write-Log "Install-PowerShellModules started at $startTime UTC"
+Write-Log "Install-PowerShellModules started at $startTime UTC" Cyan
 
 # x.x.0 Always make sure that PSGallery is installed and trusted or all other module install operations will be problematic
 Install-PowerShellGet
 
 # x.x.0 Install the latest version of specified modules if missing or outdated
 $results = Install-PowerShellModule -ModuleList $modules
-$moduleInstallResults.AddRange($results)
+[void]$moduleInstallResults.AddRange($results)
 
 # x.x.0 Pester is a special case and requires different handling
 if ($powerShellModulesList.pesterUpgrade -eq $true) {
     Remove-Pester3
-    $pesterResult = Install-PowerShellModule -ModuleList "Pester"
-    $moduleInstallResults.Add($pesterResult)
+    $pesterUpgradeResult = Install-PowerShellModule -ModuleList "Pester"
+    [void]$moduleInstallResults.Add($pesterUpgradeResult)
 }
 
 # x.x.0 Download and install or upgrade PowerShell 7
 if ($powerShellModulesList.powershell7Install -eq $true) {
-    $ps7Result = Install-PowerShell7
-    $moduleInstallResults.Add($ps7Result)
+    $ps7InstallResult = Install-PowerShell7
+    [void]$moduleInstallResults.Add($ps7InstallResult)
 }
 
 Write-Log "Modules install results:"
@@ -88,7 +88,7 @@ Write-Log $moduleInstallResults
 # x.x.0 Log script execution time
 $scriptExecutionTime = ((Get-Date).ToUniversalTime()) - $startTime
 Write-Log "Install-PowerShellModules took $($scriptExecutionTime.ToString("hh\:mm\:ss")) to complete."
-Write-Log "Log file for install located at: $global:logFilePath"
 Write-Log $separator
+Write-Host "Log file for install located at: $global:logFilePath"
 # Leave output on screen for 10 seconds before closing the window
 Start-Sleep 10

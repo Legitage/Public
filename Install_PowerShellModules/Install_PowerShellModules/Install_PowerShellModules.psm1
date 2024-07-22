@@ -54,6 +54,7 @@ function Install-PowerShellGet {
     Write-Log "Installing the latest version of the NuGet package provider"
     Install-PackageProvider -Name NuGet -Force -Confirm:$false
 
+    Write-Log "Installing PowerShellGet"
     $result = Install-PowerShellModule -ModuleList PowerShellGet
 }
 
@@ -171,7 +172,7 @@ function Install-PowerShell7 {
 
     if ($installPS7 -eq $true) {
         try {
-            Invoke-Expression "& { $(Invoke-RestMethod -Uri "https://aka.ms/install-powershell.ps1") } -UseMSI"
+            Invoke-Expression "& { $(Invoke-RestMethod -Uri "https://aka.ms/install-powershell.ps1") } -UseMSI -Quiet"
             $moduleInstallStatus = "Installed"
         }
         catch {
