@@ -1,12 +1,12 @@
 <#PSScriptInfo
 .VERSION 1.0.0
-.GUID 
-.AUTHOR 
-.COMPANYNAME 
-.COPYRIGHT 
+.GUID 63116a77-d7f7-4109-b6bd-d29491e5d4a5
+.AUTHOR Chad Armitage
+.COMPANYNAME N/A
+.COPYRIGHT Chad Armitage
 .TAGS Exchange On-Prem Attributes
-.LICENSEURI https://example.com/
-.PROJECTURI https://example.com/
+.LICENSEURI https://github.com/Legitage/Public/blob/main/LICENSE
+.PROJECTURI https://github.com/Legitage/Public
 .RELEASENOTES
     1.0.0  Initial release
 #>

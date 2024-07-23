@@ -1,3 +1,16 @@
+<#PSScriptInfo
+.VERSION 1.0.0
+.GUID 9527d52a-facc-49df-900c-1f220653bbb0
+.AUTHOR Chad Armitage
+.COMPANYNAME N/A
+.COPYRIGHT Chad Armitage
+.TAGS markdown numbered comments
+.LICENSEURI https://github.com/Legitage/Public/blob/main/LICENSE
+.PROJECTURI https://github.com/Legitage/Public
+.RELEASENOTES 
+    1.0.0  Initial release
+#>
+
 <# 
     .SYNOPSIS
     Prevents computer from going to sleep

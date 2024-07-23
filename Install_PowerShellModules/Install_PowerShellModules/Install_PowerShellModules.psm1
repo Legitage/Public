@@ -42,18 +42,19 @@ function Install-PowerShellGet {
     Source: https://docs.microsoft.com/en-us/powershell/scripting/gallery/installing-psget?view=powershell-7.2
     #>
 
-    # Set TLS 1.2
+    # 2.1.1 Set TLS 1.2
     Write-Log "Setting TLS version to 1.2"
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-    # Allow modules to be installed from PS Gallery without all the prompts
-    Write-Log "Setting PSGallery installation policy to trusted"
-    Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
-
-    # Install the latest NuGet provider
+    # 2.1.2 Install the latest NuGet provider
     Write-Log "Installing the latest version of the NuGet package provider"
     Install-PackageProvider -Name NuGet -Force -Confirm:$false
 
+    # 2.1.3 Allow modules to be installed from PS Gallery without prompts
+    Write-Log "Setting PSGallery installation policy to trusted"
+    Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
+
+    # 2.1.4 Install PowerShellGet
     Write-Log "Installing PowerShellGet"
     $result = Install-PowerShellModule -ModuleList PowerShellGet
 }
@@ -79,7 +80,9 @@ function Install-PowerShellModule {
 
     $installResults = [System.Collections.ArrayList]::new()
 
+    # 2.2.1 Loop through each PowerShell module in the list
     foreach ($module in $ModuleList) {
+        # 2.2.2 Check if the module is already installed
         $moduleVersion = (Find-Module -Name $module).Version
         $moduleInstalled = Get-InstalledModule -Name $module -MinimumVersion $moduleVersion -ErrorAction SilentlyContinue
         if ($moduleInstalled) {
@@ -88,6 +91,7 @@ function Install-PowerShellModule {
 
         }
         else {
+            # 2.2.3 Install/update the specified module
             Write-Log "The $module module is either not installed or is an outdated version. Installing current version."
             try {
                 Install-Module -Name $module -MinimumVersion $moduleVersion -Force -AllowClobber -Confirm:$false
@@ -100,6 +104,7 @@ function Install-PowerShellModule {
             }
         }
 
+        # 2.2.4 Collect the module install results
         $installResult = [PSCustomObject]@{
             "Module Name"    = $module
             "Module Version" = $moduleVersion
@@ -124,9 +129,10 @@ function Remove-Pester3 {
     Remove & install commands from: https://pester-docs.netlify.app/docs/introduction/installation
     #>
     
-    # Check to see if any version of Pester v5 is already installed
+    # 2.3.1 Check to see if any version of Pester v5 is already installed
     $v5PesterInstalled = Get-InstalledModule -Name Pester -MinimumVersion 5.0.0
     if ($null -eq $v5PesterInstalled) {
+        # 2.3.2 Remove Pester v3 module files and reg keys
         Write-Log "Removing Pester v3"
         $pester3ModuleDir = "C:\Program Files\WindowsPowerShell\Modules\Pester"
         takeown /F $pester3ModuleDir /A /R
@@ -143,18 +149,22 @@ function Remove-Pester3 {
 function Install-PowerShell7 {
     <#
     .SYNOPSIS
-    R
+    Installs PowerShell 7
 
     .DESCRIPTION
-    U
+    Calls Microsoft script that installs the PowerShell 7 MSI package in quiet mode
 
     .NOTES
-    
+    Script source: https://aka.ms/install-powershell.ps1
     #>
+
+    # 3.0.1 Get currently installed version of PowerShell 7
     [version]$ps7Version = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\PowerShellCore\InstalledVersions\*" -Name "SemanticVersion"
     if ($null -ne $ps7Version) {
+        # 3.0.2 Get the latest version of PowerShell 7
         $metadata = Invoke-RestMethod "https://raw.githubusercontent.com/PowerShell/PowerShell/master/tools/metadata.json"
         [version]$release = $metadata.ReleaseTag -replace '^v'
+        # 3.0.3 Check if PowerShell version is current or not installed
         if ($ps7Version -lt $release) {
             Write-Log "Updating PowerShell 7 from $ps7Version to version $release"
             $installPS7 = $true
@@ -170,6 +180,7 @@ function Install-PowerShell7 {
         $installPS7 = $true
     }
 
+    # 3.0.4 Install/update PowerShell 7
     if ($installPS7 -eq $true) {
         try {
             Invoke-Expression "& { $(Invoke-RestMethod -Uri "https://aka.ms/install-powershell.ps1") } -UseMSI -Quiet"
@@ -182,6 +193,7 @@ function Install-PowerShell7 {
         }
     }
 
+    # 3.0.5 Collect PowerShell 7 install results
     $installResult = [PSCustomObject]@{
         "Module Name"    = "PowerShell 7"
         "Module Version" = $release.ToString()

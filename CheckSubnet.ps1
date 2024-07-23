@@ -85,15 +85,15 @@ function checkSubnet ([string]$addr1, [string]$addr2) {
             return CheckNetworkToSubnet $unetwork2 $mask2 $unetwork1
         }
     }
-    ElseIf ($mask1) {
+    elseIf ($mask1) {
         # If second input is address and first input is subnet check if it belongs
         return CheckSubnetToNetwork $unetwork1 $mask1 $unetwork2
     }
-    ElseIf ($mask2) {
+    elseIf ($mask2) {
         # If first input is address and second input is subnet check if it belongs
         return CheckNetworkToSubnet $unetwork2 $mask2 $unetwork1
     }
-    Else {
+    else {
         # If both inputs are ip check if they match
         # Added 'return' statement as this appears to have been a typo in the original
         return CheckNetworkToNetwork $unetwork1 $unetwork2

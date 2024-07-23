@@ -1,9 +1,9 @@
 <#PSScriptInfo
 .VERSION 1.0.0
-.GUID 
-.AUTHOR 
-.COMPANYNAME 
-.COPYRIGHT 
+.GUID f782e008-46d9-4932-bcd8-ef563e947342
+.AUTHOR Chad Armitage
+.COMPANYNAME N/A
+.COPYRIGHT Chad Armitage
 .TAGS Convert File Base64 Encode Decode
 .LICENSEURI https://example.com/
 .PROJECTURI https://example.com/
