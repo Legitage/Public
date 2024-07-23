@@ -31,6 +31,11 @@ Installs latest version of PowerShell 7
 - Option to upgrade Pester module
 - Option to install/update PowerShell 7
 
+### Log file location
+
+Log file is written to the environment temp directory: ```$env:TEMP```  
+Should be the same as: ```%temp%```
+
 ## Logic Flow
 
 1. Start script, get start time
