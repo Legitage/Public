@@ -278,7 +278,19 @@ pre {
 Includes upgrade from Pester v3 to Pester v5.<br />
 Installs latest version of PowerShell 7</p>
 <h2 id="getting-started">Getting Started</h2>
-<p>Copy the <code>Install_PowerShellModules</code> folder to install location.</p>
+<ul>
+<li><p>Copy the <code>Install_PowerShellModules</code> folder to install location.</p>
+</li>
+<li><p>Script must run from an elevated command prompt (user should be prompted)</p>
+</li>
+<li><p>Requires setting the execution to allow running local scripts if not already set</p>
+<ul>
+<li>If Get-ExecutionPolicy is the result is &quot;Undefined&quot; -or &quot;Restricted&quot;, run:</li>
+</ul>
+<pre><code class="language-PowerShell">Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
+</code></pre>
+</li>
+</ul>
 <h3 id="dependencies">Dependencies</h3>
 <ul>
 <li>User account with Administrative privileges on the local workstation</li>

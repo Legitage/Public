@@ -10,7 +10,14 @@ Installs latest version of PowerShell 7
 
 ## Getting Started
 
-Copy the ```Install_PowerShellModules``` folder to install location.
+- Copy the ```Install_PowerShellModules``` folder to install location.
+- Script must run from an elevated command prompt (user should be prompted)
+- Requires setting the execution to allow running local scripts if not already set
+  - If Get-ExecutionPolicy is the result is "Undefined" -or "Restricted", run:
+
+  ```PowerShell
+  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
+  ```
 
 ### Dependencies
 
