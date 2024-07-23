@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<style>
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+html, body {
+	font-family: var(--markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", system-ui, "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+body {
+	padding-top: 1em;
+}
+
+/* Reset margin top for elements */
+h1, h2, h3, h4, h5, h6,
+p, ol, ul, pre {
+	margin-top: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 600;
+	margin-top: 24px;
+	margin-bottom: 16px;
+	line-height: 1.25;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection :not(tr,ul,ol).code-active-line:before,
+body.showEditorSelection :not(tr,ul,ol).code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+.vscode-high-contrast.showEditorSelection  :not(tr,ul,ol).code-line .code-line:hover:before {
+	border-left: none;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+/* Prevent sub and sup elements from affecting line height */
+sub,
+sup {
+	line-height: 0;
+}
+
+ul ul:first-child,
+ul ol:first-child,
+ol ul:first-child,
+ol ol:first-child {
+	margin-bottom: 0;
+}
+
+img, video {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+p {
+	margin-bottom: 16px;
+}
+
+li p {
+	margin-bottom: 0.7em;
+}
+
+ul,
+ol {
+	margin-bottom: 0.7em;
+}
+
+hr {
+	border: 0;
+	height: 1px;
+	border-bottom: 1px solid;
+}
+
+h1 {
+	font-size: 2em;
+	margin-top: 0;
+	padding-bottom: 0.3em;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h2 {
+	font-size: 1.5em;
+	padding-bottom: 0.3em;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h3 {
+	font-size: 1.25em;
+}
+
+h4 {
+	font-size: 1em;
+}
+
+h5 {
+	font-size: 0.875em;
+}
+
+h6 {
+	font-size: 0.85em;
+}
+
+table {
+	border-collapse: collapse;
+	margin-bottom: 0.7em;
+}
+
+th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+th,
+td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0;
+	padding: 2px 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+	border-radius: 2px;
+}
+
+code {
+	font-family: var(--vscode-editor-font-family, "SF Mono", Monaco, Menlo, Consolas, "Ubuntu Mono", "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace);
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	display: inline-block;
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+	background: none;
+}
+
+/** Theming */
+
+pre {
+	background-color: var(--vscode-textCodeBlock-background);
+	border: 1px solid var(--vscode-widget-border);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light h2,
+.vscode-light hr,
+.vscode-light td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark h2,
+.vscode-dark hr,
+.vscode-dark td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+</style>
+<body>
+<h1 id="install_powershellmodules">Install_PowerShellModules</h1>
+<p>Automates installation of PSGallery PowerShell modules specified in JSON file</p>
+<h2 id="description">Description</h2>
+<p>Automatically elevates the PowerShell script and installs JSON specified PowerShell modules with the latest version.<br />
+Includes upgrade from Pester v3 to Pester v5.<br />
+Installs latest version of PowerShell 7</p>
+<h2 id="getting-started">Getting Started</h2>
+<p>Copy the <code>Install_PowerShellModules</code> folder to install location.</p>
+<h3 id="dependencies">Dependencies</h3>
+<ul>
+<li>User account with Administrative privileges on the local workstation</li>
+<li><code>Install_PowerShellModules.psm1</code> PowerShell module</li>
+<li><code>PowerShellModulesList.json</code> file</li>
+</ul>
+<h3 id="configurable-information-in-powershellmoduleslist.json">Configurable information in PowerShellModulesList.json</h3>
+<ul>
+<li>List of PowerShell modules to install</li>
+<li>Option to upgrade Pester module</li>
+<li>Option to install/update PowerShell 7</li>
+</ul>
+<h2 id="logic-flow">Logic Flow</h2>
+<ol>
+<li>Start script, get start time
+<ol>
+<li>Auto-Elevate PowerShell script if not already</li>
+<li>Install_PowerShellModules module</li>
+<li>Import module install list from JSON file</li>
+<li>Set log file path</li>
+<li>Get Modules to be installed or updated to the latest version</li>
+<li>Begin update log</li>
+</ol>
+</li>
+<li>Begin module installation
+<ol>
+<li>Always make sure that PSGallery is installed and trusted or all other module install operations will be problematic
+<ol>
+<li>Set TLS 1.2</li>
+<li>Install the latest NuGet provider</li>
+<li>Allow modules to be installed from PS Gallery without prompts</li>
+<li>Install PowerShellGet</li>
+</ol>
+</li>
+<li>Install the latest version of specified modules if missing or outdated
+<ol>
+<li>Loop through each PowerShell module in the list</li>
+<li>Check if the module is already installed</li>
+<li>Install/update the specified module</li>
+<li>Collect the module install results</li>
+</ol>
+</li>
+<li>Pester is a special case and requires different handling
+<ol>
+<li>Check to see if any version of Pester v5 is already installed</li>
+<li>Remove Pester v3 module files and reg keys</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>Download and install/upgrade PowerShell 7
+<ol>
+<li>Get currently installed version of PowerShell 7</li>
+<li>Get the latest version of PowerShell 7</li>
+<li>Check if PowerShell version is current or not installed</li>
+<li>Install/update PowerShell 7</li>
+<li>Collect PowerShell 7 install results</li>
+</ol>
+</li>
+<li>Display results
+<ol>
+<li>Log script execution time</li>
+<li>Display log file path</li>
+<li>Leave output on screen for 10 seconds before closing the window</li>
+</ol>
+</li>
+</ol>
+<h2 id="version-history">Version History</h2>
+<ul>
+<li>Change history located in Install_PowerShellModules.psd1</li>
+</ul>
+<pre><code class="language-PowerShell">(Import-PowerShellDataFile .\Install_PowerShellModules.psd1).PrivateData.PSData.ReleaseNotes
+</code></pre>
+
+</body>
+</html>
