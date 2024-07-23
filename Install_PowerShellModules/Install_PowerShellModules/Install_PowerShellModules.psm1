@@ -158,13 +158,13 @@ function Install-PowerShell7 {
     Script source: https://aka.ms/install-powershell.ps1
     #>
 
-    # 3.0.1 Get currently installed version of PowerShell 7
+    # 3.1.0 Get currently installed version of PowerShell 7
     [version]$ps7Version = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\PowerShellCore\InstalledVersions\*" -Name "SemanticVersion"
     if ($null -ne $ps7Version) {
-        # 3.0.2 Get the latest version of PowerShell 7
+        # 3.2.0 Get the latest version of PowerShell 7
         $metadata = Invoke-RestMethod "https://raw.githubusercontent.com/PowerShell/PowerShell/master/tools/metadata.json"
         [version]$release = $metadata.ReleaseTag -replace '^v'
-        # 3.0.3 Check if PowerShell version is current or not installed
+        # 3.3.0 Check if PowerShell version is current or not installed
         if ($ps7Version -lt $release) {
             Write-Log "Updating PowerShell 7 from $ps7Version to version $release"
             $installPS7 = $true
@@ -180,7 +180,7 @@ function Install-PowerShell7 {
         $installPS7 = $true
     }
 
-    # 3.0.4 Install/update PowerShell 7
+    # 3.4.0 Install/update PowerShell 7
     if ($installPS7 -eq $true) {
         try {
             Invoke-Expression "& { $(Invoke-RestMethod -Uri "https://aka.ms/install-powershell.ps1") } -UseMSI -Quiet"
@@ -193,7 +193,7 @@ function Install-PowerShell7 {
         }
     }
 
-    # 3.0.5 Collect PowerShell 7 install results
+    # 3.5.0 Collect PowerShell 7 install results
     $installResult = [PSCustomObject]@{
         "Module Name"    = "PowerShell 7"
         "Module Version" = $release.ToString()

@@ -77,7 +77,7 @@ if ($powerShellModulesList.pesterUpgrade -eq $true) {
     [void]$moduleInstallResults.Add($pesterUpgradeResult)
 }
 
-# 3.0.0 Download and install or upgrade PowerShell 7
+# 3.0.0 Download and install/upgrade PowerShell 7
 if ($powerShellModulesList.powershell7Install -eq $true) {
     $ps7InstallResult = Install-PowerShell7
     [void]$moduleInstallResults.Add($ps7InstallResult)
